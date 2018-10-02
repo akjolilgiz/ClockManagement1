@@ -29,9 +29,9 @@ namespace ClockManagement.Controllers
     }
 
     [HttpPost("/employees")]
-    public ActionResult Create(int employeeDepartmentId, string employeeName)
+    public ActionResult Create(int employeeDepartmentId, string employeeName, string employeeUserName, string employeeUserPassword)
     {
-      Employee newEmployee = new Employee(employeeName);
+      Employee newEmployee = new Employee(employeeName, employeeUserName, employeeUserPassword);
       newEmployee.Save();
       Department foundDepartment = Department.Find(employeeDepartmentId);
       newEmployee.AddDepartment(foundDepartment);

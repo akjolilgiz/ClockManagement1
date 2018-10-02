@@ -23,5 +23,20 @@
   <button type="submit" class="btn btn-info">Add</button>
 </form>
 
+
+<form action = '/employees/@Model["foundEmployee"].id/clockIn' method="post">
+<button type = 'submit' class = 'btn btn-success'> Clock In</button>
+
+
+<form action = '/employees/@Model["foundEmployee"].id/clockOut' method="post">
+<button type = 'submit' class = 'btn btn-success'> Clock In</button>
+
+<h2> Clock in time : @Model["foundEmployee"].clock_out<h2>
+<h2> Clock in time : @Model["foundEmployee"].clock_in<h2>
+<h2> Total hours : @Model["foundEmployee"].hours<h2>
+
+
+
+
 <a href = '/employees/@Model["selectedEmployee"].id/update'><button class='btn btn-info'>Edit Employee</button></a>
 <a href = '/employees/@Model["selectedEmployee"].id'><button class='btn btn-info'>Back to Employees</button></a>

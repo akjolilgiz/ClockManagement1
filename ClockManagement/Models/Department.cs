@@ -231,8 +231,10 @@ namespace ClockManagement.Models
       {
         int employeeId = rdr.GetInt32(0);
         string employeeName = rdr.GetString(1);
+        string employeeUsername = rdr.GetString(2);
+        string employeeUserPassword = rdr.GetString(3);
 
-        Employee newEmployee = new Employee(employeeName, employeeId);
+        Employee newEmployee = new Employee(employeeName, employeeUsername, employeeUserPassword, employeeId);
         employees.Add(newEmployee);
       }
       conn.Close();
