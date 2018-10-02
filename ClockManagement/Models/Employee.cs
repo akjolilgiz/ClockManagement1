@@ -11,7 +11,7 @@ namespace ClockManagement.Models
     public string username {get; set;}
     public string password {get; set;}
 
-    public Employee (string Name, int employeeId=0, string username, string password)
+    public Employee (string Name, string loginUsername, string loginPassword, int employeeId = 0)
     {
       id = employeeId;
       name = Name;
@@ -30,7 +30,9 @@ namespace ClockManagement.Models
         Employee newEmployee = (Employee) otherEmployee;
         bool areIdsEqual = (this.id == newEmployee.id);
         bool areDescriptionsEqual = (this.name == newEmployee.name);
-        return (areIdsEqual && areDescriptionsEqual);
+        bool areUserNamesEqual = (this.username == newEmployee.username);
+        bool arePasswordsEqual = (this.password == newEmployee.password);
+        return (areIdsEqual && areDescriptionsEqual && areUserNamesEqual && arePasswordsEqual);
       }
     }
 
@@ -66,18 +68,23 @@ namespace ClockManagement.Models
       return allEmployees;
     }
 
-    public void Save()
+    public void SignUp()
     {
       MySqlConnection conn = DB.Connection();
       conn.Open();
 
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"INSERT INTO employees (name) VALUES (@name);";
+      cmd.CommandText = @"INSERT INTO employees (username, password) VALUES (@username, @password);";
 
-      MySqlParameter employeeName = new MySqlParameter();
-      employeeName.ParameterName = "@name";
-      employeeName.Value = this.name;
-      cmd.Parameters.Add(employeeName);
+      MySqlParameter employeeUsername = new MySqlParameter();
+      employeeUsername.ParameterUsername = "@username";
+      employeeUsername.Value = this.username;
+      cmd.Parameters.Add(employeeUsername);
+
+      MySqlParameter employeePassword = new MySqlParameter();
+      employeePassword.ParameterPassword = "@password";
+      employeePassword.Value = this.login;
+      cmd.Parameters.Add(employeePassword);
 
       cmd.ExecuteNonQuery();
       id = (int) cmd.LastInsertedId;
