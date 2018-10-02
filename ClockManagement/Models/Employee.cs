@@ -48,12 +48,12 @@ namespace ClockManagement.Models
       conn.Open();
 
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"INSERT INTO employees (name) VALUES (@name);";
+      cmd.CommandText = @"INSERT INTO employees (name, username, password) VALUES (@name, @username, @password);";
 
-      MySqlParameter employeeName = new MySqlParameter();
-      employeeName.ParameterName = "@name";
-      employeeName.Value = this.name;
-      cmd.Parameters.Add(employeeName);
+      cmd.Parameters.AddWithValue("@name", this.name);
+      cmd.Parameters.AddWithValue("@username", this.username);
+      cmd.Parameters.AddWithValue("@password", this.password);
+
 
       cmd.ExecuteNonQuery();
       id = (int) cmd.LastInsertedId;

@@ -7,9 +7,13 @@
   <div class="form-group">
     <label for='employeeName'>Employee Name</label>
     <input id='employeeName' name='employeeName' type='text'>
+    <label for='employeeUserName'>Employee Username</label>
+    <input id='employeeUserName' name='employeeUserName' type='text'>
+    <label for='employeeUserPassword'>Employee Password</label>
+    <input id='employeeUserPassword' name='employeeUserPassword' type='text'>
 
     <select name="departmentId">
-      @foreach(var department in Model)
+      @foreach(var department in @Model["allDepartments"])
       {
         <option value="@department.id">@department.name</option>
       }

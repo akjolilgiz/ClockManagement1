@@ -12,14 +12,26 @@ namespace ClockManagement.Controllers
         return View();
       }
 
-      [HttpPost("/")]
-      public ActionResult LogIn(string userName, string password)
+      // [HttpGet("/signup")]
+      // public ActionResult SignUp()
+      // {
+      //   return View();
+      // }
+
+      [HttpGet("/login")]
+      public ActionResult Login()
+      {
+        return View();
+      }
+
+      [HttpPost("/login")]
+      public ActionResult CreateLogIn(string userName, string password)
       {
         bool result = Employee.Login(userName, password);
         string resultString = "";
         if (result == true)
         {
-          resultString = "true";
+          return View("Login");
         }
         else
         {
@@ -27,5 +39,6 @@ namespace ClockManagement.Controllers
         }
         return View(result);
       }
+
     }
 }
