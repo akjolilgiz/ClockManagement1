@@ -41,6 +41,31 @@ namespace ClockManagement.Models
       return this.name.GetHashCode();
     }
 
+
+    public void Save()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"INSERT INTO employees (name) VALUES (@name);";
+
+      MySqlParameter employeeName = new MySqlParameter();
+      employeeName.ParameterName = "@name";
+      employeeName.Value = this.name;
+      cmd.Parameters.Add(employeeName);
+
+      cmd.ExecuteNonQuery();
+      id = (int) cmd.LastInsertedId;
+
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+
+
     public static List<Employee> GetAll()
     {
       List<Employee> allEmployees  = new List<Employee> ();
@@ -71,6 +96,8 @@ namespace ClockManagement.Models
       return allEmployees;
     }
 
+
+
     public void SignUp()
     {
       MySqlConnection conn = DB.Connection();
@@ -80,13 +107,13 @@ namespace ClockManagement.Models
       cmd.CommandText = @"INSERT INTO employees (username, password) VALUES (@username, @password);";
 
       MySqlParameter employeeUsername = new MySqlParameter();
-      employeeUsername.ParameterUsername = "@username";
+      employeeUsername.ParameterName = "@username";
       employeeUsername.Value = this.username;
       cmd.Parameters.Add(employeeUsername);
 
       MySqlParameter employeePassword = new MySqlParameter();
-      employeePassword.ParameterPassword = "@password";
-      employeePassword.Value = this.login;
+      employeePassword.ParameterName = "@password";
+      employeePassword.Value = this.password;
       cmd.Parameters.Add(employeePassword);
 
       cmd.ExecuteNonQuery();
@@ -365,10 +392,13 @@ namespace ClockManagement.Models
       cmd.Parameters.AddWithValue("@searchName", userName);
       cmd.Parameters.AddWithValue("@searchPassword", password);
 
-      MySql.Data.MySqlClient.MySqlDataAdapter MyAdapter = new MySql.Data.MySqlClient.MySqlDataAdapter(cmd);
-      DataSet dataset = new DataSet();
-      MyAdapter.Fill(dataset);
-      if (dataset.Tables(0).Rows.Count > 0)
+      // MySql.Data.MySqlClient.MySqlDataAdapter MyAdapter = new MySql.Data.MySqlClient.MySqlDataAdapter(cmd);
+      // DataSet dataset = new DataSet();
+      // MyAdapter.Fill(dataset);
+      // if (dataset.Tables(0).Rows.Count > 0)
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+
+      if(rdr.Read())
       {
       // Login Pass
       return true;

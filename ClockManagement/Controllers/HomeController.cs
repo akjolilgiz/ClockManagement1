@@ -15,15 +15,15 @@ namespace ClockManagement.Controllers
       [HttpPost("/")]
       public ActionResult LogIn(string userName, string password)
       {
-        bool result = Employee.LogIn(userName, password);
-        string result = "";
+        bool result = Employee.Login(userName, password);
+        string resultString = "";
         if (result == true)
         {
-          result = "true";
+          resultString = "true";
         }
         else
         {
-          result = "false";
+          resultString = "false";
         }
         return View(result);
       }
