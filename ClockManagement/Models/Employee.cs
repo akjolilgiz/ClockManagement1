@@ -99,6 +99,47 @@ namespace ClockManagement.Models
       }
     }
 
+    // public static Employee Login(string username, string password)
+    // {
+    //   MySqlConnection conn = DB.Connection();
+    //   conn.Open();
+    //
+    //   var cmd = conn.CreateCommand() as MySqlCommand;
+    //   cmd.CommandText = @"SELECT * FROM employees WHERE username = @username AND password = @password;";
+    //
+    //   MySqlParameter username = new MySqlParameter();
+    //   username.ParameterName = "@username";
+    //   username.Value = username;
+    //   cmd.Parameters.Add(username);
+    //
+    //   MySqlParameter password = new MySqlParameter();
+    //   password.ParameterName = "@password";
+    //   password.Value = password;
+    //   cmd.Parameters.Add(password);
+    //
+    //   MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+    //
+    //   int employeeId = 0;
+    //   string employeeName = "";
+    //   string username = "";
+    //   string password = "";
+    //
+    //   while(rdr.Read())
+    //   {
+    //     employeeId = rdr.GetInt32(0);
+    //     employeeName = rdr.GetString(1);
+    //     username = rdr.GetString(2);
+    //     password = rdr.GetString(3);
+    //   }
+    //   Employee foundEmployee = new Employee(employeeName, username, password, employeeId);
+    //
+    //   conn.Close();
+    //   if (conn != null)
+    //   {
+    //     conn.Dispose();
+    //   }
+    //   return foundEmployee;
+    // }
     public static void Delete(int id)
     {
       MySqlConnection conn = DB.Connection();
@@ -312,64 +353,109 @@ namespace ClockManagement.Models
       return allEmployees;
     }
 
-    public static int Login(string userName, string password)
+    public static bool Login(string userName, string password)
     {
       MySqlConnection conn = DB.Connection();
       conn.Open();
+
       MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
 
-      cmd.CommandText = @"SELECT * FROM users WHERE user_name = @userName;";
+      cmd.CommandText = @"SELECT * FROM employees WHERE username = @searchName AND password = @searchPassword;";
 
-      MySqlParameter userNameParameter = new MySqlParameter();
-      userNameParameter.ParameterName = "@userName";
-      userNameParameter.Value = userName;
-      cmd.Parameters.Add(userNameParameter);
+      cmd.Parameters.AddWithValue("@searchName", userName);
+      cmd.Parameters.AddWithValue("@searchPassword", password);
 
-      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
-
-      int id = 0;
-      string databasePassword = "";
-      int sessionId = 0;
-      string databaseUserName = "";
-
-      while (rdr.Read())
+      MySql.Data.MySqlClient.MySqlDataAdapter MyAdapter = new MySql.Data.MySqlClient.MySqlDataAdapter(cmd);
+      DataSet dataset = new DataSet();
+      MyAdapter.Fill(dataset);
+      if (dataset.Tables(0).Rows.Count > 0)
       {
-        id = rdr.GetInt32(0);
-        databaseUserName = rdr.GetString(4);
-        databasePassword = rdr.GetString(5);
-      }
-
-      rdr.Dispose();
-      if (password == databasePassword && userName == databaseUserName)
-      {
-        cmd.CommandText = @"INSERT INTO sessions (user_id, session_id) VALUES (@userId, @sessionId);";
-
-        MySqlParameter thisIdParameter = new MySqlParameter();
-        thisIdParameter.ParameterName = "@userId";
-        thisIdParameter.Value = id;
-        cmd.Parameters.Add(thisIdParameter);
-
-        MySqlParameter sessionIdParameter = new MySqlParameter();
-        sessionIdParameter.ParameterName = "@sessionId";
-        Random newRandom = new Random();
-        int randomNumber = newRandom.Next(100000000);
-        sessionIdParameter.Value = randomNumber;
-        cmd.Parameters.Add(sessionIdParameter);
-
-        cmd.ExecuteNonQuery();
-        sessionId = randomNumber;
+      // Login Pass
+      return true;
       }
       else
       {
-
+      //Login fail
+      return false;
       }
-      conn.Close();
-      if (!(conn == null))
-      {
-        conn.Dispose();
-      }
-
-      return sessionId;
     }
+
+      // string StrQuery1 = "Select count from table1 where userID='" + @userName + "' and password='" + txtPassword.Text + "'";
+      // MySql.Data.MySqlClient.MySqlCommand myCommand = new MySql.Data.MySqlClient.MySqlCommand(strQuery, MySqlConn);
+      // MySql.Data.MySqlClient.MySqlDataAdapter MyAdapter = new MySql.Data.MySqlClient.MySqlDataAdapter(myCommand);
+      // DataSet ds = new DataSet();
+      // MyAdapter.Fill(ds);
+      // if (ds.Tables(0).Rows.Count > 0)
+      // {
+      // // Login Pass
+      // }
+      // else
+      // {
+      // //Login fail
+      // }
+
+
+
+
+
+    // public static int Login(string userName, string password)
+    // {
+    //   MySqlConnection conn = DB.Connection();
+    //   conn.Open();
+    //   MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+    //
+    //   cmd.CommandText = @"SELECT * FROM users WHERE user_name = @userName;";
+    //
+    //   MySqlParameter userNameParameter = new MySqlParameter();
+    //   userNameParameter.ParameterName = "@userName";
+    //   userNameParameter.Value = userName;
+    //   cmd.Parameters.Add(userNameParameter);
+    //
+    //   MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+    //
+    //   int id = 0;
+    //   string databasePassword = "";
+    //   int sessionId = 0;
+    //   string databaseUserName = "";
+    //
+    //   while (rdr.Read())
+    //   {
+    //     id = rdr.GetInt32(0);
+    //     databaseUserName = rdr.GetString(4);
+    //     databasePassword = rdr.GetString(5);
+    //   }
+    //
+    //   rdr.Dispose();
+    //   if (password == databasePassword && userName == databaseUserName)
+    //   {
+    //     cmd.CommandText = @"INSERT INTO sessions (user_id, session_id) VALUES (@userId, @sessionId);";
+    //
+    //     MySqlParameter thisIdParameter = new MySqlParameter();
+    //     thisIdParameter.ParameterName = "@userId";
+    //     thisIdParameter.Value = id;
+    //     cmd.Parameters.Add(thisIdParameter);
+    //
+    //     MySqlParameter sessionIdParameter = new MySqlParameter();
+    //     sessionIdParameter.ParameterName = "@sessionId";
+    //     Random newRandom = new Random();
+    //     int randomNumber = newRandom.Next(100000000);
+    //     sessionIdParameter.Value = randomNumber;
+    //     cmd.Parameters.Add(sessionIdParameter);
+    //
+    //     cmd.ExecuteNonQuery();
+    //     sessionId = randomNumber;
+    //   }
+    //   else
+    //   {
+    //
+    //   }
+    //   conn.Close();
+    //   if (!(conn == null))
+    //   {
+    //     conn.Dispose();
+    //   }
+    //
+    //   return sessionId;
+    // }
   }
 }

@@ -11,5 +11,21 @@ namespace ClockManagement.Controllers
       {
         return View();
       }
+
+      [HttpPost("/")]
+      public ActionResult LogIn(string userName, string password)
+      {
+        bool result = Employee.LogIn(userName, password);
+        string result = "";
+        if (result == true)
+        {
+          result = "true";
+        }
+        else
+        {
+          result = "false";
+        }
+        return View(result);
+      }
     }
 }
